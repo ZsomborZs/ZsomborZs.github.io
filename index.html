@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+	<meta charset="utf-8">
+    <title>Unitx</title>
+	<link rel="icon" href="https://img.icons8.com/flat_round/64/000000/checkmark.png">
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+	<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.css">
+</head>
+
+<body style="padding:40px">
+<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="hide()" >
+  Info
+</button>
+
+<h2 align="center">Mértékegység átváltó</h2>
+
+<h4>
+<div ng-app="myApp" ng-controller="myCtrl" ng-cloak>
+
+<form name="myForm" align="left">
+  <label>
+    <input type="radio" ng-model="unit.name" value="meter">
+    Hossz
+  </label><br/>
+  <!--label>
+    <input type="radio" ng-model="unit.name" value="gramm" disabled>
+    Terület
+  </label><br/>
+  <label>
+    <input type="radio" ng-model="unit.name" value="liter" disabled>
+    Tömeg
+  </label><br/>
+  <label>
+    <input type="radio" ng-model="unit.name" value="liter" disabled>
+    Idő
+  </label><br/-->
+ </form>
+ 
+ <div align="center">
+<input type="num" ng-model="in" style='width:7%'>
+<!--div class="mdl-textfield mdl-js-textfield">
+    <input class="mdl-textfield__input" type="num" ng-model="in" pattern="-?[0-9]*(\.[0-9]+)?" id="sample2">
+    <span class="mdl-textfield__error">Számot gépelj!</span>
+</div-->
+  
+<!--select ng-init="selected = prefixs[1]" ng-model="selected" ng-options="x for x in prefixs"></select-->
+<md-input-container>
+<!--label>Unit</label-->
+   <md-select ng-model="selected" ng-init="selected = prefixs[1]">
+     <md-option ng-repeat="x in prefixs" value="{{x}}">{{x}}</md-option>
+   </md-select>
+</md-input-container>
+
+= {{in*multiplier()*multiplier1()}}
+
+<!--select ng-init="selected1 = prefixs[1]" 
+ng-model="selected1" ng-options="x for x in prefixs"></select-->
+<md-input-container>
+<!--label>Unit</label-->
+   <md-select ng-model="selected1" ng-init="selected1 = prefixs[1]">
+     <md-option ng-repeat="x in prefixs" value="{{x}}">{{x}}</md-option>
+   </md-select>
+</md-input-container>
+
+<br/><br/>
+<div id="solution" style="display: none">
+  {{in}}·10<sup>{{pow_in}}</sup>·10<sup>{{pow_out}}</sup>
+  = {{in}}·10<sup>({{pow_in}}+({{pow_out}}))</sup>
+  = {{in}}·10<sup>{{pow_in+pow_out}}</sup>
+  {{selected1}}
+  <br/><br/>
+  <a href="https://hu.wikipedia.org/wiki/SI-prefixum">Prefixumok</a>
+</div>
+</div>
+</h4>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-animate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-aria.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-messages.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.js"></script>
+
+<script type="text/javascript">
+var app = angular.module('myApp', ['ngMaterial']);
+app.controller('myCtrl', function($scope) {
+    $scope.in = 1;
+    $scope.prefixs = ["km","m","dm","cm","mm","µm","nm","pm"];
+    
+    $scope.unit = {
+        name: 'meter'
+    };
+    
+    $scope.pow_in=1;
+    $scope.pow_out=1;
+    
+    $scope.multiplier = function() {
+    	if($scope.selected=="km")$scope.pow_in=3;
+        if($scope.selected=="m")$scope.pow_in=0;
+        if($scope.selected=="dm")$scope.pow_in=-1;
+        if($scope.selected=="cm")$scope.pow_in=-2;
+        if($scope.selected=="mm")$scope.pow_in=-3;
+        if($scope.selected=="µm")$scope.pow_in=-6;
+        if($scope.selected=="nm")$scope.pow_in=-9;
+        if($scope.selected=="pm")$scope.pow_in=-12;
+        return Math.pow(10,$scope.pow_in);
+    };
+    $scope.multiplier1 = function() {
+    	if($scope.selected1=="km")$scope.pow_out=-3;
+        if($scope.selected1=="m")$scope.pow_out=0;
+        if($scope.selected1=="dm")$scope.pow_out=1;
+        if($scope.selected1=="cm")$scope.pow_out=2;
+        if($scope.selected1=="mm")$scope.pow_out=3;
+        if($scope.selected1=="µm")$scope.pow_out=6;
+        if($scope.selected1=="nm")$scope.pow_out=9;
+        if($scope.selected1=="pm")$scope.pow_out=12;
+        return Math.pow(10,$scope.pow_out);
+    };
+});
+
+function hide() {
+  var x = document.getElementById("solution");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+</script>
+
+</body>
+</html>
